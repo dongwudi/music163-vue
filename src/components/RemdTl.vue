@@ -15,6 +15,7 @@ export default {
 	position: relative;
 	padding-left: 9px;
 	margin-bottom: 14px;
+	margin-top: 20px;
 	font-size: 17px;
 	height: 20px;
 	line-height: 20px;

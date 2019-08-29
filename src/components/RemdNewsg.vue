@@ -24,7 +24,9 @@ export default {
 	props: {
 		result: {
 			type: Array,
-			default: []
+			default: function() {
+				return null
+			}
 		}
 	}
 };

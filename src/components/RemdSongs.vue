@@ -8,7 +8,7 @@
 				class="remd_li"
 			>
 				<div class="remd_img">
-					<img :src="song.picUrl" alt class="u-img" />
+					<img v-lazy="song.picUrl" alt class="u-img" />
 					<span class="u-earp remd_lnum">{{song.playCount+'万'}}</span>
 				</div>
 				<p class="remd_text">{{song.name}}</p>
@@ -49,7 +49,6 @@ export default {
 <style lang="scss" scoped>
 .remd_songs {
 	position: relative;
-	padding-bottom: 24px;
 }
 .remd_ul {
 	&::after {
