@@ -5,9 +5,10 @@ import store from "./store/index";
 import "./filter";
 import "./style/reset.scss";
 
-import axios from "@/axios";
-Vue.prototype.$axios = axios;
 Vue.config.productionTip = false;
+
+import fastclick from 'fastclick';
+fastclick.attach(document.body)
 
 new Vue({
   router,

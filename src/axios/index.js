@@ -37,7 +37,7 @@ axiosServer.interceptors.request.use(
 axiosServer.interceptors.response.use(
   function(response) {
     const data = response.data;
-    return data;
+    return JSON.parse(data);
   },
   function(err) {
     return Promise.reject(err);

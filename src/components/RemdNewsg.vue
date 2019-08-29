@@ -7,7 +7,7 @@
 						<div class="f-thide sgtl">{{song.name}}</div>
 						<div class="f-thide sginfo">
 							<i class="u-hmsprt sghot"></i>
-							{{song.infoart}} - {{song.infoname}}
+							{{song.infoart}} - {{song.song.album.name}}
 						</div>
 					</div>
 					<div class="sgchfr">
@@ -20,10 +20,13 @@
 </template>
 
 <script>
-let list = [];
 export default {
-	name: "remd_newsg",
-	props: ["result"]
+	props: {
+		result: {
+			type: Array,
+			default: []
+		}
+	}
 };
 </script>
 

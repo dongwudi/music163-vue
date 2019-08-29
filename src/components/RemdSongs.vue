@@ -2,16 +2,14 @@
 	<div class="remd_songs">
 		<div class="remd_ul">
 			<router-link
-				v-for="song in result"
+				v-for="song in _result"
 				:key="song.id"
 				:to="`/playlist?id=${song.id}`"
 				class="remd_li"
 			>
 				<div class="remd_img">
 					<img :src="song.picUrl" alt class="u-img" />
-					<span
-						class="u-earp remd_lnum"
-					>{{song.playCount > 10000 ? (song.playCount / 10000).toFixed(1) + '万' : song.playCount}}</span>
+					<span class="u-earp remd_lnum">{{song.playCount+'万'}}</span>
 				</div>
 				<p class="remd_text">{{song.name}}</p>
 			</router-link>
@@ -20,20 +18,30 @@
 </template>
 
 <script>
+import { remdSongs, RES_OK } from "@/axios/api";
+import { changeCount } from "@/util";
 export default {
-	name: "remd_songs",
 	data() {
 		return {
-			result: null
+			result: []
 		};
 	},
 	created() {
-		this.$axios
-			.get("/api/personalized?limit=6")
-			.then(res => {
-				this.result = JSON.parse(res).result;
-			})
-			.catch(err => console.log(err));
+		remdSongs().then(res => {
+			if (res.code === RES_OK) {
+				this.result = res.result;
+			}
+		});
+	},
+	computed: {
+		_result() {
+			let res = this.result;
+			return res.map(item => {
+				return Object.assign({}, item, {
+					playCount: changeCount(item.playCount)
+				});
+			});
+		}
 	}
 };
 </script>
