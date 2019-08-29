@@ -33,11 +33,6 @@ export default {
     window.scrollTo(0, 0);
     this._getSongs();
   },
-  mounted() {
-    setTimeout(() => {
-      new BScroll(this.$refs.s, {});
-    }, 20);
-  },
   methods: {
     _getSongs() {
       remdNewSongs().then(res => {
@@ -52,7 +47,7 @@ export default {
       let result = this.result;
       return result.map(item => {
         return Object.assign({}, item, {
-          infoart: item.song.artists.map((art, i) => art.name).join(" / ")
+          sginfo: item.song.artists.map((art, i) => art.name).join(" / ") + "-" + item.song.album.name
         });
       });
     }

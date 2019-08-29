@@ -1,36 +1,52 @@
 <template>
-	<div class="m-hmhot">
-		<HotTop :time="time" />
-		<HotCont :list="list" />
-	</div>
+  <div class="m-hmhot">
+    <HotTop :time="time" />
+    <RemdNewsg :result="_list" :order="true" />
+    <Loading v-if="!_list.length" />
+  </div>
 </template>
 
 <script>
 import HotTop from "@/components/HotTop";
-import HotCont from "@/components/HotCont";
+import RemdNewsg from "@/components/RemdNewsg";
+import Loading from "@/components/Loading";
+import { hotList, RES_OK } from "@/axios/api";
 export default {
-	name: "hmhot",
-	data() {
-		return {
-			time: 1566436104305,
-			list: null
-		};
-	},
-	components: {
-		HotTop,
-		HotCont
-	},
-	created() {
-		window.scrollTo(0, 0);
-		this.$axios
-			.get("/api/top/list?idx=1")
-			.then(res => {
-				let data = JSON.parse(res).playlist;
-				this.list = data.tracks;
-				this.time = data.updateTime;
-			})
-			.catch(err => console.log(err));
-	}
+  data() {
+    return {
+      time: 1566436104305,
+      list: []
+    };
+  },
+  components: {
+    HotTop,
+    RemdNewsg,
+    Loading
+  },
+  created() {
+    window.scrollTo(0, 0);
+    this._gethot();
+  },
+  methods: {
+    _gethot() {
+      hotList().then(res => {
+        this.list = res.playlist.tracks;
+        this.time = res.playlist.updateTime;
+      });
+    }
+  },
+  computed: {
+    _list() {
+      let list = this.list;
+      return list.map(item => {
+        let sginfo =
+          item.ar.map(ari => ari.name).join(" / ") + "-" + item.al.name;
+        return Object.assign({}, item, {
+          sginfo: sginfo
+        });
+      });
+    }
+  }
 };
 </script>
 

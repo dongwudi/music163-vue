@@ -14,4 +14,5 @@ export const RES_OK = 200;
 
 export const bannerList = () => getData("/api/banner", { type: 2 });
 export const remdSongs = () => getData("/api/personalized", { limit: 6 });
-export const remdNewSongs = () => getData("/api/personalized/newsong");
+export const remdNewSongs = () => getData("/api/personalized/newsong"); 
+export const hotList = () => getData("/api/top/list?idx=1");
