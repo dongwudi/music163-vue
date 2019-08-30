@@ -20,9 +20,8 @@ export default {
 
 <style lang="scss" scoped>
 .loading-container {
-  position: absolute;
   width: 100%;
-  top: 50%;
+  margin-top: 25%;
   transform: translateY(-50%);
 }
 .loading {

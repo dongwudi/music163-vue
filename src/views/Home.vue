@@ -1,54 +1,42 @@
 <template>
-	<div class="m-tabarea m-tabarea-index">
+	<div class="m-home">
 		<nav class="u-tab mrc-tab f-bd f-bd-btm f-bd f-bd-btm">
-			<a
-				v-for="(tab,i) in tabs"
-				:key="i"
-				:class="i === currentTab ? 'z-selected tabtitle' : 'tabtitle'"
-				@click="chg_curtab(i)"
-			>
+			<router-link class="tabtitle" to="/remd">
 				<div class="tabtxt">
 					<span class="tt">
-						<em class="tt_word">{{tab}}</em>
+						<em class="tt_word">推荐音乐</em>
 					</span>
 				</div>
-			</a>
+			</router-link>
+			<router-link class="tabtitle" to="/hot">
+				<div class="tabtxt">
+					<span class="tt">
+						<em class="tt_word">热歌榜</em>
+					</span>
+				</div>
+			</router-link>
+			<router-link class="tabtitle" to="/search">
+				<div class="tabtxt">
+					<span class="tt">
+						<em class="tt_word">搜索</em>
+					</span>
+				</div>
+			</router-link>
 		</nav>
-		<div class="m-tabct">
-			<div class="tabctitem">
-				<transition name="slide-fade" mode="out-in">
-					<Homeremd v-if="currentTab === 0" key="remd" />
-					<HomeHot v-if="currentTab === 1" key="hot" />
-					<HomeSearch v-if="currentTab === 2" key="search" />
-				</transition>
+		<div class="m-tabarea m-tabarea-index">
+			<div class="m-tabct">
+				<div class="tabctitem">
+					<transition name="slide-fade" mode="out-in">
+						<router-view></router-view>
+					</transition>
+				</div>
 			</div>
 		</div>
 	</div>
 </template>
 
 <script>
-import Homeremd from "@/views/Homeremd.vue";
-import HomeHot from "@/views/HomeHot.vue";
-import HomeSearch from "@/views/HomeSearch.vue";
-export default {
-	name: "home",
-	components: {
-		Homeremd,
-		HomeHot,
-		HomeSearch
-	},
-	data() {
-		return {
-			tabs: ["推荐音乐", "热歌榜", "搜索"],
-			currentTab: 0
-		};
-	},
-	methods: {
-		chg_curtab(num) {
-			this.currentTab = num;
-		}
-	}
-};
+export default {};
 </script>
 
 <style lang="scss" scoped>
@@ -68,7 +56,7 @@ export default {
 }
 @mixin mu_tab {
 	display: -webkit-flex;
-	display: flex;
+	/* display: flex; */
 	-webkit-justify-content: center;
 	justify-content: center;
 	-webkit-align-items: center;
@@ -87,12 +75,14 @@ export default {
 	height: 100%;
 }
 .m-tabarea {
-	margin: 0 auto;
 	-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 	-webkit-user-select: none;
+	position: fixed;
+	width: 100%;
+	top: 40px;
+	bottom: 0;
 }
-.m-home .m-tabarea-index {
-	padding-top: 40px;
+.m-home {
 	.u-tab {
 		position: fixed;
 		top: 0;
@@ -131,7 +121,7 @@ export default {
 			white-space: nowrap;
 		}
 	}
-	.z-selected {
+	.router-link-active {
 		.tabtxt {
 			color: #dd001b;
 			&::after {

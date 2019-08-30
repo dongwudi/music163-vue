@@ -1,9 +1,1 @@
-export const SET_SEARCH_VALUE = "set_search_value";
-export const SET_ISSEARCH = "set_issearch";
-export const SET_RECOMLIST = "set_recomlist";
-export const SET_LOADSHOW = "set_loadshow";
-export const SET_BESTMATCH = "set_bestmatch";
-export const SET_NEWSLIST = "set_newslist";
-export const SET_BESTNEW = "set_bestnew";
-export const SET_RESFLAG = "set_resflag";
-export const SET_OFFSET = "set_offset";
+

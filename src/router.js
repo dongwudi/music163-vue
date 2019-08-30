@@ -9,12 +9,34 @@ const router = new Router({
     {
       path: "/",
       name: "home",
-      component: Home
+      component: Home,
+      redirect: "/remd",
+      children: [
+        {
+          path: "remd",
+          name: "remd",
+          component: () =>
+            import(/* webpackChunkName: "remd" */ "./views/Homeremd.vue")
+        },
+        {
+          path: "hot",
+          name: "hot",
+          component: () =>
+            import(/* webpackChunkName: "hot" */ "./views/HomeHot.vue")
+        },
+        {
+          path: "search",
+          name: "search",
+          component: () =>
+            import(/* webpackChunkName: "search" */ "./views/HomeSearch.vue")
+        }
+      ]
     },
     {
       path: "/playlist",
       name: "playlist",
-      component: () => import(/* webpackChunkName: "playlist" */ "./views/Playlist.vue")
+      component: () =>
+        import(/* webpackChunkName: "playlist" */ "./views/Playlist.vue")
     },
     {
       path: "/song",
@@ -24,7 +46,8 @@ const router = new Router({
     {
       path: "/artist",
       name: "artist",
-      component: () => import(/* webpackChunkName: "artist" */ "./views/Artist.vue")
+      component: () =>
+        import(/* webpackChunkName: "artist" */ "./views/Artist.vue")
     }
   ]
 });

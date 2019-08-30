@@ -1,108 +1,64 @@
 <template>
-	<div class="m-hmsrch" ref="search">
-		<form action="#" class="m-input f-bd f-bd-btm" method="get">
-			<div class="inputcover">
-				<i class="u-svg u-svg-srch"></i>
-				<input
-					type="search"
-					name="search"
-					class="input"
-					autocomplete="off"
-					v-model="value"
-					@focus="focusHandle"
-					v-focus
-				/>
-				<label class="holder" v-show="!value">搜索歌曲、歌手、专辑</label>
-				<figure class="close">
-					<i class="u-svg u-svg-empty" @click="showHolderHandle" :class="value ? 'z-show': ''"></i>
-				</figure>
+	<div class="m-hmsrch">
+		<SearchBox palceHolder="搜索歌曲、歌手、专辑" ref="searchbox" @query="queryChange" />
+		<div class="hots">
+			<div class="m-default">
+				<section class="m-hotlist" v-show="!query">
+					<h3 class="title">热门搜索</h3>
+					<ul class="list">
+						<li
+							class="item f-bd f-bd-full"
+							@click="addQuery(item.first)"
+							v-for="(item,i) in hotSearchList"
+							:key="i"
+						>
+							<a class="link" href="javascript:void(0);">{{item.first}}</a>
+						</li>
+					</ul>
+				</section>
 			</div>
-		</form>
-		<SearchDef v-if="!value" />
-		<SearchRes v-if="!isSearch && value" />
-		<RecomCom :value="value" :result="recomList" v-if="isSearch && value" />
-		<SearchLoad v-if="loadShow" />
+			<SearchHistory v-show="!query" :query="query" />
+		</div>
+		<SearchRes :query="query" v-show="query" />
 	</div>
 </template>
 
 <script>
-import SearchDef from "@/components/SearchDef";
+import SearchBox from "@/components/SearchBox";
 import SearchRes from "@/components/SearchRes";
-import SearchLoad from "@/components/SearchLoad";
-import RecomCom from "@/components/RecomCom";
+import SearchHistory from "@/components/SearchHistory";
 
+import { hotSearch, RES_OK } from "@/axios/api";
 import { mapState, mapMutations, mapActions } from "vuex";
-import {
-	SET_SEARCH_VALUE,
-	SET_ISSEARCH,
-	SET_RECOMLIST,
-	SET_BESTNEW,
-	SET_RESFLAG
-} from "@/store/mutation-types";
-import { setTimeout, clearTimeout } from "timers";
-let timer;
+
 export default {
-	name: "hmsrch",
 	data() {
 		return {
-			showDef: true,
-			offset: 0
+			query: "",
+			hotSearchList: []
 		};
 	},
 	components: {
-		SearchDef,
+		SearchBox,
 		SearchRes,
-		SearchLoad,
-		RecomCom
-	},
-	computed: {
-		value: {
-			get() {
-				return this.$store.state.searchV;
-			},
-			set(newValue) {
-				this.setvalue(newValue);
-			}
-		},
-		...mapState(["isSearch", "loadShow", "recomList", "resflag"])
-	},
-	methods: {
-		...mapMutations({
-			setvalue: SET_SEARCH_VALUE,
-			setsearch: SET_ISSEARCH,
-			setFlag: SET_RESFLAG
-		}),
-		...mapActions({
-			setrecomlist: SET_RECOMLIST,
-			setbestnew: SET_BESTNEW
-		}),
-		focusHandle() {
-			this.setsearch(true);
-		},
-		showHolderHandle(e) {
-			this.setvalue("");
-		}
+		SearchHistory
 	},
 	created() {
-		window.scrollTo(0, 0);
+		this._getHotSearchList();
 	},
-	beforeDestroy() {
-		this.setvalue("");
-	},
-	watch: {
-		value(newValue, oldValue) {
-			if (!newValue) {
-				this.setrecomlist(null);
-				return;
-			}
-			if (this.isSearch) {
-				this.setrecomlist(newValue);
-			} else {
-				this.setbestnew({
-					value: newValue,
-					offset: this.offset
-				});
-			}
+	methods: {
+		_getHotSearchList() {
+			hotSearch().then(res => {
+				if (res.code === RES_OK) {
+					this.hotSearchList = res.result.hots;
+				}
+			});
+		},
+		addQuery(newQuery) {
+			this.$refs.searchbox.addQuery(newQuery);
+		},
+		queryChange(query) {
+			this.query = query;
 		}
 	}
 };
@@ -110,72 +66,50 @@ export default {
 
 <style lang="scss" scoped>
 .m-hmsrch {
+	position: relative;
+	top: 0;
+	left: 0;
 	background: #fbfcfd;
+	height: 100%;
 }
-.inputcover {
-	padding: 0 16px;
-}
-.inputcover,
-.u-input-login {
+.hots {
+	position: absolute;
+	top: 60px;
 	width: 100%;
-	box-sizing: border-box;
-}
-
-.m-input {
-	padding: 15px 10px;
-	.inputcover {
-		position: relative;
-		width: 100%;
-		height: 30px;
-		padding: 0 30px;
-		box-sizing: border-box;
-		background: #ebecec;
-		border-radius: 30px;
-	}
-	.u-svg-srch {
-		position: absolute;
-		left: 0;
-		top: 9px;
-		margin: 0 8px;
-		vertical-align: middle;
-	}
-	.input {
-		width: 100%;
-		height: 30px;
-		line-height: 18px;
-		background: transparent;
-		font-size: 14px;
-		color: #333;
-	}
-	.holder {
-		position: absolute;
-		left: 30px;
-		top: 5px;
-		font-size: 14px;
-		color: #c9c9c9;
-		background: transparent;
-		pointer-events: none;
-	}
-	.close {
-		position: absolute;
-		right: 0;
-		top: 0;
-		width: 30px;
-		height: 30px;
-		line-height: 28px;
-		text-align: center;
-	}
-	.u-svg-empty {
-		display: none;
-		vertical-align: middle;
-	}
-}
-
-.m-input:after {
-	border-color: rgba(0, 0, 0, 0.1);
+	left: 0;
+	right: 0;
+	bottom: 0;
+	height: auto;
+	overflow: auto;
 }
 
 .u-svg-empty.z-show {
 	display: inline-block;
+}
+
+.m-hotlist {
+	padding: 15px 10px 0;
+	.title {
+		font-size: 12px;
+		line-height: 12px;
+		color: #666;
+	}
+	.list {
+		margin: 10px 0 7px;
+	}
+	.item {
+		display: inline-block;
+		height: 32px;
+		margin-right: 8px;
+		margin-bottom: 8px;
+		padding: 0 14px;
+		font-size: 14px;
+		line-height: 32px;
+		color: #333;
+		&:after {
+			border-color: #d3d4da;
+			border-radius: 32px;
+		}
+	}
 }
 </style>

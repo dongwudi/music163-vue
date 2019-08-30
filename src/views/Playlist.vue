@@ -1,77 +1,80 @@
 <template>
-	<div class="m-playlist u-paddlr u-paddbm">
-		<div>
-			<section class="u-plhead pylst_header">
-				<div class="plhead_bg" :style="`background-image:url(${resultList.backgroundUrl})`"></div>
-				<div class="plhead_wrap">
-					<div class="plhead_fl lsthd_fl">
-						<img class="u-img" :src="resultList.coverImgUrl" />
-						<span class="lsthd_icon">歌单</span>
-						<i class="u-earp lsthd_num">{{resultList.count}}</i>
-					</div>
-					<div class="plhead_fr">
-						<h2 class="f-thide2 f-brk lsthd_title">{{resultList.name}}</h2>
-						<div class="lsthd_auth f-thide">
-							<a class="lsthd_link" href="javascript:;">
-								<div class="u-avatar lsthd_ava">
-									<img class="u-img" :src="resultList.avatarUrl" />
-									<span class="ava-icon ava-icon-daren"></span>
-								</div>
-								{{resultList.nickname}}
-							</a>
+	<Scroll>
+		<div class="m-playlist u-paddlr u-paddbm">
+			<div>
+				<section class="u-plhead pylst_header">
+					<div class="plhead_bg" :style="`background-image:url(${resultList.backgroundUrl})`"></div>
+					<div class="plhead_wrap">
+						<div class="plhead_fl lsthd_fl">
+							<img class="u-img" :src="resultList.coverImgUrl" />
+							<span class="lsthd_icon">歌单</span>
+							<i class="u-earp lsthd_num">{{resultList.count}}万</i>
+						</div>
+						<div class="plhead_fr">
+							<h2 class="f-thide2 f-brk lsthd_title">{{resultList.name}}</h2>
+							<div class="lsthd_auth f-thide">
+								<a class="lsthd_link" href="javascript:;">
+									<div class="u-avatar lsthd_ava">
+										<img class="u-img" :src="resultList.avatarUrl" />
+										<span class="ava-icon ava-icon-daren"></span>
+									</div>
+									{{resultList.nickname}}
+								</a>
+							</div>
 						</div>
 					</div>
-				</div>
-			</section>
-			<!-- 简介 -->
-			<section class="pylst_intro">
-				<div class="lstit_tags">
-					标签：
-					<em class="f-bd f-bd-full lstit_tag">华语</em>
-					<em class="f-bd f-bd-full lstit_tag">浪漫</em>
-					<em class="f-bd f-bd-full lstit_tag">快乐</em>
-				</div>
-				<div class="u-intro">
-					<div class="f-brk" :class="showIntro ? '' : 'f-thide3'" @click="showIntro = !showIntro">
-						<span v-for="(dec,i) in resultList.description" :key="i">
-							<i v-if="i === 0">简介： {{dec}}</i>
-							<i>{{dec}}</i>
-							<br />
-						</span>
+				</section>
+				<!-- 简介 -->
+				<section class="pylst_intro">
+					<div class="lstit_tags">
+						标签：
+						<em class="f-bd f-bd-full lstit_tag">华语</em>
+						<em class="f-bd f-bd-full lstit_tag">浪漫</em>
+						<em class="f-bd f-bd-full lstit_tag">快乐</em>
 					</div>
-					<span class="intro_arrow" :class="showIntro ? 'u-arowup' : 'u-arowdown'"></span>
-				</div>
-			</section>
-		</div>
-		<div class="pylst_list">
-			<h3 class="u-smtitle">歌曲列表</h3>
-			<div class="m-sglst">
-				<router-link
-					class="m-sgitem"
-					:to="{ name: 'song', query: {id: item.id}}"
-					v-for="(item,i) in resultList.tracks"
-					:key="item.id"
-				>
-					<div class="sgfl">{{i + 1}}</div>
-					<div class="sgfr f-bd f-bd-btm">
-						<div class="sgchfl">
-							<div class="f-thide sgtl">{{item.name}}</div>
-							<div class="f-thide sginfo">{{item.sginfo}}</div>
+					<div class="u-intro">
+						<div class="f-brk" :class="showIntro ? '' : 'f-thide3'" @click="showIntro = !showIntro">
+							<span v-for="(dec,i) in resultList.description" :key="i">
+								<i v-if="i === 0">简介： {{dec}}</i>
+								<i>{{dec}}</i>
+								<br />
+							</span>
 						</div>
-						<div class="sgchfr">
-							<span class="u-hmsprt sgchply"></span>
-						</div>
+						<span class="intro_arrow" :class="showIntro ? 'u-arowup' : 'u-arowdown'"></span>
 					</div>
-				</router-link>
+				</section>
+			</div>
+			<div class="pylst_list">
+				<h3 class="u-smtitle">歌曲列表</h3>
+				<div class="m-sglst">
+					<router-link
+						class="m-sgitem"
+						:to="{ name: 'song', query: {id: item.id}}"
+						v-for="(item,i) in resultList.tracks"
+						:key="item.id"
+					>
+						<div class="sgfl">{{i + 1}}</div>
+						<div class="sgfr f-bd f-bd-btm">
+							<div class="sgchfl">
+								<div class="f-thide sgtl">{{item.name}}</div>
+								<div class="f-thide sginfo">{{item.sginfo}}</div>
+							</div>
+							<div class="sgchfr">
+								<span class="u-hmsprt sgchply"></span>
+							</div>
+						</div>
+					</router-link>
+				</div>
 			</div>
 		</div>
-	</div>
+	</Scroll>
 </template>
 
 <script>
+import Scroll from "@/components/Scroll";
 import { changeCount } from "@/util";
+import { playlist, RES_OK } from "@/axios/api";
 export default {
-	name: "playlist",
 	data() {
 		return {
 			id: this.$route.query.id,
@@ -80,9 +83,11 @@ export default {
 		};
 	},
 	created() {
-		this.$axios
-			.get(`/api/playlist/detail?id=${this.id}`)
-			.then(res => (this.result = JSON.parse(res)));
+		playlist(this.id).then(res => {
+			if (res.code === RES_OK) {
+				this.result = res;
+			}
+		});
 	},
 	computed: {
 		resultList() {
@@ -105,6 +110,9 @@ export default {
 			};
 			return res;
 		}
+	},
+	components: {
+		Scroll
 	}
 };
 </script>

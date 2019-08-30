@@ -14,3 +14,11 @@ export function addClass(el, className) {
 export function hasClass(el, className) {
   return new RegExp(`(^|\\s)${className}(\\s|$)`).test(el.className);
 }
+
+export function hisSave(list) {
+  localStorage.setItem('history',list)
+}
+
+export function getHis() {
+  return localStorage.getItem('history')
+}

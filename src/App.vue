@@ -1,24 +1,14 @@
 <template>
-  <div id="j-app" class="u-height">
-    <div class="root">
-      <div class="m-home">
-        <router-view></router-view>
-        <footer class="footer"></footer>
-      </div>
-    </div>
-  </div>
+	<div id="j-app" class="u-height">
+		<div class="root">
+			<router-view></router-view>
+		</div>
+	</div>
 </template>
 
 <script>
-export default {
-  name: "home"
-};
+export default {};
 </script>
 
 <style lang="scss">
-.footer {
-  height: 20px;
-  text-align: center;
-  line-height: 20px;
-}
 </style>
