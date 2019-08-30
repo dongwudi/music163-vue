@@ -20,4 +20,6 @@ export const hotSearch = () => getData("/api/search/hot");
 export const searchMultimatch = (val) => getData(`/api/search/multimatch?keywords=${val}`)
 export const searchkeyWords = (val,offset) => getData(`/api//search?keywords=${val}&limit=10&offset=${offset}`)
 export const playlist = (id) => getData(`/api/playlist/detail?id=${id}`)
+export const songDetail = (id) => getData(`/api/song/detail?ids=${id}`)
+export const wordsDetail = (id) => getData(`/api/lyric?id=${id}`)
 
