@@ -1,5 +1,5 @@
 <template>
-  <Scroll>
+  <Scroll :data="resultList.tracks">
     <div class="m-playlist u-paddlr u-paddbm">
       <div>
         <section class="u-plhead pylst_header">
